@@ -1,8 +1,40 @@
 # Transcoding can be hard.
 
-Dealing with text files that can be encoded any number of different ways and trying to normalize them all to UTF-8 with minimal data loss is a tricky thing.
+Dealing with an arbitrary text file encoded in an unknown way and trying to 
+normalize to UTF-8 (with minimal data loss) is a tricky thing.
 
-This is a little test bed for trying out various detection and transcoding strategies. Due to the way excel handles CSVs, one can expect to have to handle UTF-16LE with a BOM, or windows-1252/iso-8859-1. After trying several different ways of tackling the different encoded files, the Ensure-encoding gem seems to offer the most solid transcoding. 
+This is a little test bed for trying out various detection and transcoding strategies. The problem
+I was solving had to do with user uploaded CSV or TXT files for importing data into an app. Due to 
+the way excel handles CSVs, I fully expected to need to deal with at least UTF-16LE files with a BOM
+(byte order marker) and various flavors of ISO-8859. In a perfect world you would just specify 
+that all files must be valid UTF-8, but most DEVELOPERS don't really understand what UTF-8 is let
+alone your users!
+
+I started my exercise by laying a baseline with 1.9's built in string encoding methods. 
+Explicitly transcoding the files works flawlessly (in MRI and jRuby) as long as the source encoding was 
+set to exactly match the file's actual encoding. One trick here is setting the `File.open` directive
+as `rb:bom|utf-8`. This scraps a BOM (Byte Order Marker) if one is present and sets the 
+encoding to UTF-8 even if that's not the actual string encoding. Once you have this BOM stripped
+string you can do the explicit transcode and everything comes out nice. This is great and all, but
+if you don't know the precise source encoding of the file you are dealing with then the results 
+of the encode might not be so pretty.
+
+In the quest to detect the source encoding I tried several gems. [rchardet19](https://github.com/oleander/rchardet) comes very close to 
+getting things right: it nails the unicode files (UTF-8 and UTF-16LE), and at least returns a flavor of ISO-8859 for 
+the windows-1252 and iso-8859-1 files (ISO_8859_8). Unfortunately trying to transcode to UTF-8 and setting 
+the source encoding as 8859-8 yields not so great results. Close but no cigar.
+
+[charlock_holmes](https://github.com/brianmario/charlock_holmes) is the next gem I tried. I expected this one to be the winner as it is built on 
+top of the icu4c which is *supposedly* the most badass character encoding detector to ever walk these
+lands. It did not even come close to guessing the encodings correctly. As you can see below it guessed
+correctly for valid UTF-8 (congrats), binary of all things for UTF-16LE (helpful!), and EUC-JP for the ISO flavored
+files (WAT?).
+
+[Ensure-encoding](https://github.com/Manfred/Ensure-encoding) won the day. One of the strategies this gem employs is very similar to similar to what 
+I was planning on writing by hand: using an educated guess, use a small subset of encodings and test 
+the unknown string against them one by one until we get a valid encoding and then transcode off that. 
+As the output below shows, Ensure-encoding yields the same results as my contrived explicit transcode 
+test.
 
 Output:
 
