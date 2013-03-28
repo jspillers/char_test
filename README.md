@@ -31,12 +31,12 @@ lands. It did not even come close to guessing the encodings correctly. As you ca
 correctly for valid UTF-8 (congrats), binary of all things for UTF-16LE (helpful!), and EUC-JP for the ISO flavored
 files (WAT?).
 
-[Ensure-encoding](https://github.com/Manfred/Ensure-encoding) won the day. One of the strategies this gem employs is very similar to similar to what 
-I was planning on writing by hand: using an educated guess, use a small subset of encodings and test 
-the unknown string against them one by one until we get a valid encoding and then transcode off that. If all
-your anticipated encodings fail to get a valid match, then you can fall back to an encode without an explicit
-source set and just pass in the options so that unknown or invalid characters get tossed out or replaced rather
-than raising an encoding error.
+[Ensure-encoding](https://github.com/Manfred/Ensure-encoding) won the day. One of the strategies this gem employs 
+is very similar to what I was planning on writing by hand: using an educated guess, pick a small subset of 
+encodings and test the unknown string against them one by one until you get a valid encoding. Once the source encoding 
+is establish you can then transcode to UTF-8 successfully. If all your anticipated encodings fail to get a valid match, 
+then you can fall back to an encode without an explicit source set and just pass in the options so that unknown or 
+invalid characters get tossed out or replaced rather than raising an encoding error.
 ```ruby
   some_string.encode(Encoding::UTF_8, invalid: :replace, undef: replace)
 ```
