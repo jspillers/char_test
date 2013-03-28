@@ -33,7 +33,15 @@ files (WAT?).
 
 [Ensure-encoding](https://github.com/Manfred/Ensure-encoding) won the day. One of the strategies this gem employs is very similar to similar to what 
 I was planning on writing by hand: using an educated guess, use a small subset of encodings and test 
-the unknown string against them one by one until we get a valid encoding and then transcode off that. 
+the unknown string against them one by one until we get a valid encoding and then transcode off that. If all
+your anticipated encodings fail to get a valid match, then you can fall back to an encode without an explicit
+source set and just pass in the options so that unknown or invalid characters get tossed out or replaced rather
+than raising an encoding error.
+```ruby
+  some_string.encode(Encoding::UTF_8, invalid: :replace, undef: replace)
+```
+[String#encode docs](http://www.ruby-doc.org/core-1.9.3/String.html#method-i-encode)
+
 As the output below shows, Ensure-encoding yields the same results as my contrived explicit transcode 
 test.
 
