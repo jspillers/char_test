@@ -8,7 +8,8 @@ I was solving had to do with user uploaded CSV or TXT files for importing data i
 the way excel handles CSVs, I fully expected to need to deal with at least UTF-16LE files with a BOM
 (byte order marker) and various flavors of ISO-8859. In a perfect world you would just specify 
 that all files must be valid UTF-8, but most **developers** don't really understand what UTF-8 is let
-alone your users!
+alone your average user! You can't expect a user to do anything more than hit export on excel and dump 
+the result mess into your uploader.
 
 I started my exercise by laying a baseline with 1.9's built in string encoding methods. 
 Explicitly transcoding the files works flawlessly (in MRI and jRuby) as long as the source encoding was 
