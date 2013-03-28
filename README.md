@@ -5,8 +5,8 @@ normalize to UTF-8 (with minimal data loss) is a tricky thing.
 
 This is a little test bed for trying out various detection and transcoding strategies. The problem
 I was solving had to do with user uploaded CSV or TXT files for importing data into an app. Due to 
-the way excel handles CSVs, I fully expected to need to deal with at least UTF-16LE files with a BOM
-(byte order marker) and various flavors of ISO-8859. In a perfect world you would just specify 
+the way excel handles CSVs, I fully expected to deal with UTF-16LE files with a BOM
+(byte order marker) and/or various flavors of ISO-8859. In a perfect world you would just specify 
 that all files must be valid UTF-8, but most **developers** don't really understand what UTF-8 is let
 alone your average user! You can't expect a user to do anything more than hit export on excel and dump 
 the resulting mess into your uploader.
