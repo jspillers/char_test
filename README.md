@@ -36,7 +36,7 @@ is very similar to what I was planning on writing by hand: using an educated gue
 encodings and test the unknown string against them one by one until you get a valid encoding. Once the source encoding 
 is establish you can then transcode to UTF-8 successfully. If all your anticipated encodings fail to get a valid match, 
 then you can fall back to an encode without an explicit source set and just pass in the options so that unknown or 
-invalid characters get tossed out or replaced rather than raising an encoding error.
+invalid characters get tossed out or replaced rather than raising an encoding error. Example:
 ```ruby
   some_string.encode(Encoding::UTF_8, invalid: :replace, undef: replace)
 ```
