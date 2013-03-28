@@ -1,4 +1,4 @@
-# Transcoding is hard.
+# Transcoding can be hard.
 
 Dealing with text files that can be encoded any number of different ways and trying to normalize them all to UTF-8 with minimal data loss is a tricky thing.
 
